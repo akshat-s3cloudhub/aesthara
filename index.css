@@ -74,6 +74,45 @@
   to { transform: translateX(-50%); }
 }
 
+@keyframes heroFloat {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes heroDrift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(10px, -12px, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes heroDotFloat {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.45;
+  }
+}
+
 .animate-marquee {
   animation: marquee 30s linear infinite;
   display: flex;
@@ -82,4 +121,19 @@
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+.animate-hero-float {
+  animation: heroFloat 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-hero-drift {
+  animation: heroDrift 11s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-hero-dot {
+  animation: heroDotFloat 5.5s ease-in-out infinite;
+  will-change: transform, opacity;
 }

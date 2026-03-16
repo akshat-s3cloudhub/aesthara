@@ -2,6 +2,20 @@ import { CheckCircle, Instagram, Linkedin, Loader2, Send } from "lucide-react";
 import { useState } from "react";
 import { useActor } from "../hooks/useActor";
 
+const CONTACT_API_URL =
+  import.meta.env.VITE_CONTACT_API_URL?.trim() || "/api/contact";
+
+// When running locally, the built-in /api/contact handler may not be available.
+// Fall back to the Google Apps Script webhook URL to make the contact form work
+// without needing a local server route.
+const DEFAULT_GOOGLE_APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbx5y94IbSh0Ol1WEBIPTMjIugk1gHG8AdtU6MB7dPiQYlbfCxsfMk6ajWaS5L9HMLbF/exec";
+
+const CONTACT_API_FALLBACK_URL =
+  import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL?.trim() ||
+  import.meta.env.GOOGLE_APPS_SCRIPT_URL?.trim() ||
+  DEFAULT_GOOGLE_APPS_SCRIPT_URL;
+
 function splitName(fullName: string) {
   const trimmed = fullName.trim();
   const [firstName, ...rest] = trimmed.split(/\s+/);
@@ -41,28 +55,46 @@ export default function Footer() {
   };
 
   const submitToGoogle = async () => {
-    const response = await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: form.name.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        company: form.company.trim(),
-        message: form.message.trim(),
-        source: typeof window !== "undefined" ? window.location.href : "website",
-      }),
+    const payload = new URLSearchParams({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      company: form.company.trim(),
+      message: form.message.trim(),
+      source:
+        typeof window !== "undefined" ? window.location.href : "website",
+      recipients:
+        process.env.VITE_CONTACT_RECIPIENTS ||
+        process.env.CONTACT_RECIPIENTS ||
+        "kawaljeet.karir9@gmail.com,kawaljeet@aesthara.in",
     });
 
-    if (!response.ok) {
-      throw new Error("Contact API request failed.");
+    const response = await fetch(CONTACT_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: payload.toString(),
+    });
+
+    const raw = await response.text();
+    let result: { ok?: boolean; error?: string } = {};
+    if (raw.trim().length > 0) {
+      try {
+        result = JSON.parse(raw) as { ok?: boolean; error?: string };
+      } catch {
+        result = { ok: false, error: `Unexpected API response: ${raw}` };
+      }
     }
 
-    const result = (await response.json()) as { ok?: boolean; error?: string };
+    if (!response.ok) {
+      throw new Error(
+        result.error || `Contact API request failed (${response.status}).`,
+      );
+    }
+
     if (!result.ok) {
-      throw new Error(result.error || "Contact API request failed.");
+      throw new Error(result.error || "Contact API returned no success payload.");
     }
   };
 
@@ -116,7 +148,9 @@ export default function Footer() {
     } catch (submitError) {
       console.error(submitError);
       setError(
-        "The form could not be submitted. Please verify the webhook setup and try again.",
+        submitError instanceof Error
+          ? submitError.message
+          : "The form could not be submitted. Please verify the webhook setup and try again.",
       );
     } finally {
       setLoading(false);
@@ -332,10 +366,10 @@ export default function Footer() {
                   kawaljeet@aesthara.in
                 </a>
                 <a
-                  href="mailto:kawaljeet.karir9@gmail.com"
+                  href="tel:+919819550115"
                   className="block text-white/70 hover:text-white transition-colors"
                 >
-                  kawaljeet.karir9@gmail.com
+                  +91 98195 50115
                 </a>
               </div>
               <p className="text-white/60 text-sm">Mumbai | India</p>
@@ -455,17 +489,6 @@ export default function Footer() {
           >
             Privacy Policy
           </button>
-          <p className="text-white/30 text-xs">
-            © {year}. Built with love using{" "}
-            <a
-              href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-white/50 transition-colors"
-            >
-              caffeine.ai
-            </a>
-          </p>
         </div>
       </div>
     </footer>

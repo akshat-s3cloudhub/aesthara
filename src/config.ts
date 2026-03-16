@@ -20,7 +20,7 @@ interface JsonConfig {
 
 interface Config {
   backend_host?: string;
-  backend_canister_id: string;
+  backend_canister_id?: string;
   storage_gateway_url: string;
   bucket_name: string;
   project_id: string;
@@ -28,6 +28,7 @@ interface Config {
 }
 
 let configCache: Config | null = null;
+let hasWarnedMissingCanisterId = false;
 
 export async function loadConfig(): Promise<Config> {
   if (configCache) {
@@ -40,8 +41,13 @@ export async function loadConfig(): Promise<Config> {
     const response = await fetch(`${baseUrl}env.json`);
     const config = (await response.json()) as JsonConfig;
     if (!backendCanisterId && config.backend_canister_id === "undefined") {
-      console.error("CANISTER_ID_BACKEND is not set");
-      throw new Error("CANISTER_ID_BACKEND is not set");
+      if (!hasWarnedMissingCanisterId) {
+        console.warn(
+          "CANISTER_ID_BACKEND is not set. Some backend features may not work.",
+        );
+        hasWarnedMissingCanisterId = true;
+      }
+      // Continue with a best-effort config rather than throwing.
     }
 
     const fullConfig = {
@@ -65,8 +71,21 @@ export async function loadConfig(): Promise<Config> {
     return fullConfig;
   } catch {
     if (!backendCanisterId) {
-      console.error("CANISTER_ID_BACKEND is not set");
-      throw new Error("CANISTER_ID_BACKEND is not set");
+      if (!hasWarnedMissingCanisterId) {
+        console.warn(
+          "CANISTER_ID_BACKEND is not set. Some backend features may not work.",
+        );
+        hasWarnedMissingCanisterId = true;
+      }
+      // Continue in fallback mode without throwing.
+      return {
+        backend_host: undefined,
+        backend_canister_id: undefined,
+        storage_gateway_url: DEFAULT_STORAGE_GATEWAY_URL,
+        bucket_name: DEFAULT_BUCKET_NAME,
+        project_id: DEFAULT_PROJECT_ID,
+        ii_derivation_origin: undefined,
+      };
     }
     const fallbackConfig = {
       backend_host: undefined,
@@ -126,6 +145,20 @@ export async function createActorWithConfig(
   }
 
   const config = await loadConfig();
+
+  if (!config.backend_canister_id) {
+    // Running without a configured backend canister ID; provide a lightweight mock.
+    // This keeps the app running in dev without needing a full DFINITY setup.
+    return {
+      getAllSubmissions: async () => [],
+      submitContactForm: async () => {
+        console.warn(
+          "submitContactForm called without a backend canister ID configured.",
+        );
+      },
+    };
+  }
+
   const resolvedOptions = options ?? {};
   const agent = new HttpAgent({
     ...resolvedOptions.agentOptions,

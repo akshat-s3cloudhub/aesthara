@@ -1,8 +1,11 @@
 {
-  "name": "@caffeine/template-frontend",
+  "name": "aesthara-website",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite --open",
     "build:skip-bindings": "vite build && npm run copy:env",

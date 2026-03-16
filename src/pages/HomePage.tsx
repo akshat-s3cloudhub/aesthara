@@ -171,27 +171,27 @@ const portfolioPreviews = [
     desc: "Designed a professional corporate presentation for an Agentic AI platform and cloud automation startup.",
   },
   {
-    title: "Graphic Design Collection",
+    title: "Marketing assets",
     img: "/assets/Graphic Design Services.png",
     badge: "Graphic Design",
     badgeColor: "bg-[#53BA7C]",
-    desc: "Marketing assets and visual materials across industries.",
+    desc: "Digital Assets for IT & Technology Industry",
   },
 ];
 
 const floatingDots = [
-  { left: "8%", top: "15%", color: "rgba(255,195,46,0.8)" },
-  { left: "16%", top: "35%", color: "rgba(223,159,87,0.8)" },
-  { left: "24%", top: "55%", color: "rgba(255,255,255,0.5)" },
-  { left: "32%", top: "75%", color: "rgba(255,195,46,0.8)" },
-  { left: "40%", top: "15%", color: "rgba(223,159,87,0.8)" },
-  { left: "48%", top: "35%", color: "rgba(255,255,255,0.5)" },
-  { left: "56%", top: "55%", color: "rgba(255,195,46,0.8)" },
-  { left: "64%", top: "75%", color: "rgba(223,159,87,0.8)" },
-  { left: "72%", top: "15%", color: "rgba(255,255,255,0.5)" },
-  { left: "80%", top: "35%", color: "rgba(255,195,46,0.8)" },
-  { left: "88%", top: "55%", color: "rgba(223,159,87,0.8)" },
-  { left: "96%", top: "75%", color: "rgba(255,255,255,0.5)" },
+  { left: "8%", top: "15%", color: "rgba(255,195,46,0.8)", delay: "0s" },
+  { left: "16%", top: "35%", color: "rgba(223,159,87,0.8)", delay: "0.8s" },
+  { left: "24%", top: "55%", color: "rgba(255,255,255,0.5)", delay: "1.6s" },
+  { left: "32%", top: "75%", color: "rgba(255,195,46,0.8)", delay: "0.4s" },
+  { left: "40%", top: "15%", color: "rgba(223,159,87,0.8)", delay: "1.2s" },
+  { left: "48%", top: "35%", color: "rgba(255,255,255,0.5)", delay: "2s" },
+  { left: "56%", top: "55%", color: "rgba(255,195,46,0.8)", delay: "0.6s" },
+  { left: "64%", top: "75%", color: "rgba(223,159,87,0.8)", delay: "1.4s" },
+  { left: "72%", top: "15%", color: "rgba(255,255,255,0.5)", delay: "2.2s" },
+  { left: "80%", top: "35%", color: "rgba(255,195,46,0.8)", delay: "1s" },
+  { left: "88%", top: "55%", color: "rgba(223,159,87,0.8)", delay: "1.8s" },
+  { left: "96%", top: "75%", color: "rgba(255,255,255,0.5)", delay: "2.6s" },
 ];
 
 export default function HomePage() {
@@ -244,22 +244,25 @@ export default function HomePage() {
       >
         {/* Background decorations */}
         <div
-          className="absolute w-[500px] h-[500px] -top-20 -left-20 rounded-full pointer-events-none"
+          className="absolute w-[500px] h-[500px] -top-20 -left-20 rounded-full pointer-events-none animate-hero-drift"
           style={{
+            animationDelay: "0s",
             background:
               "radial-gradient(circle, rgba(9,65,133,0.6) 0%, rgba(0,82,128,0.3) 50%, transparent 70%)",
           }}
         />
         <div
-          className="absolute w-[400px] h-[400px] top-1/3 -right-16 rounded-full pointer-events-none"
+          className="absolute w-[400px] h-[400px] top-1/3 -right-16 rounded-full pointer-events-none animate-hero-drift"
           style={{
+            animationDelay: "1.8s",
             background:
               "radial-gradient(circle, rgba(223,159,87,0.4) 0%, rgba(255,195,46,0.2) 50%, transparent 70%)",
           }}
         />
         <div
-          className="absolute w-[350px] h-[350px] bottom-0 left-1/3 rounded-full pointer-events-none"
+          className="absolute w-[350px] h-[350px] bottom-0 left-1/3 rounded-full pointer-events-none animate-hero-drift"
           style={{
+            animationDelay: "3.2s",
             background:
               "radial-gradient(circle, rgba(83,186,124,0.3) 0%, transparent 60%)",
           }}
@@ -290,8 +293,13 @@ export default function HomePage() {
         {floatingDots.map((dot) => (
           <div
             key={`${dot.left}-${dot.top}`}
-            className="absolute w-1.5 h-1.5 rounded-full pointer-events-none"
-            style={{ left: dot.left, top: dot.top, backgroundColor: dot.color }}
+            className="absolute w-1.5 h-1.5 rounded-full pointer-events-none animate-hero-dot"
+            style={{
+              left: dot.left,
+              top: dot.top,
+              backgroundColor: dot.color,
+              animationDelay: dot.delay,
+            }}
           />
         ))}
 
@@ -337,7 +345,10 @@ export default function HomePage() {
               transition: "all 0.7s ease-out",
             }}
           >
-            <div className="relative z-20 w-[80%] max-w-md">
+            <div
+              className="relative z-20 w-[80%] max-w-md animate-hero-float"
+              style={{ animationDelay: "0.3s" }}
+            >
               <div className="rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10">
                 <img
                   src="/assets/Hero image 1.jpeg"
@@ -347,7 +358,10 @@ export default function HomePage() {
               </div>
               <div className="absolute -inset-2 rounded-3xl border border-[#DF9F57]/30 pointer-events-none" />
             </div>
-            <div className="absolute bottom-8 right-0 z-30 w-[55%] max-w-[260px]">
+            <div
+              className="absolute bottom-8 right-0 z-30 w-[55%] max-w-[260px] animate-hero-float"
+              style={{ animationDelay: "1.6s" }}
+            >
               <div className="rounded-2xl overflow-hidden shadow-xl ring-1 ring-[#FFC32E]/30">
                 <img
                   src="/assets/Hero image 2 (small).png"
@@ -356,8 +370,14 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className="absolute top-0 left-0 w-28 h-28 rounded-full bg-[#094185]/40 blur-2xl pointer-events-none" />
-            <div className="absolute bottom-8 left-8 w-20 h-20 rounded-full bg-[#DF9F57]/30 blur-2xl pointer-events-none" />
+            <div
+              className="absolute top-0 left-0 w-28 h-28 rounded-full bg-[#094185]/40 blur-2xl pointer-events-none animate-hero-drift"
+              style={{ animationDelay: "0.9s" }}
+            />
+            <div
+              className="absolute bottom-8 left-8 w-20 h-20 rounded-full bg-[#DF9F57]/30 blur-2xl pointer-events-none animate-hero-drift"
+              style={{ animationDelay: "2.4s" }}
+            />
           </div>
         </div>
 
@@ -800,7 +820,7 @@ export default function HomePage() {
                 {idx < steps.length - 1 && (
                   <div className="hidden lg:block absolute top-1/2 left-full w-full h-0.5 bg-gradient-to-r from-[#DF9F57]/30 to-transparent z-0 -translate-y-1/2" />
                 )}
-                <div className="relative bg-white rounded-2xl p-6 border-2 border-[#005280]/20 hover:border-[#005280]/40 transition-all duration-300 hover:shadow-xl shadow-lg text-center">
+                <div className="relative h-full bg-white rounded-2xl p-6 border-2 border-[#005280]/20 hover:border-[#005280]/40 transition-all duration-300 hover:shadow-xl shadow-lg text-center flex flex-col">
                   <div className="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-br from-[#DF9F57] to-[#FFC32E] rounded-full flex items-center justify-center text-[#094185] text-sm font-bold shadow-md">
                     {step.num}
                   </div>
@@ -813,7 +833,7 @@ export default function HomePage() {
                   <p className="text-[#DF9F57] text-sm font-medium mb-2">
                     {step.sub}
                   </p>
-                  <p className="text-gray-600 text-sm">{step.desc}</p>
+                  <p className="text-gray-600 text-sm flex-1">{step.desc}</p>
                 </div>
               </div>
             ))}
