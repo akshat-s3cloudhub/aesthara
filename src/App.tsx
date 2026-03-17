@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Toaster } from "@/components/ui/sonner";
 import {
   Link,
@@ -23,6 +24,7 @@ const rootRoute = createRootRoute({
       <Outlet />
       <Footer />
       <Toaster />
+      <SpeedInsights />
     </>
   ),
 });
