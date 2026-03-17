@@ -7,6 +7,7 @@ import {
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
@@ -23,6 +24,7 @@ const rootRoute = createRootRoute({
       <Outlet />
       <Footer />
       <Toaster />
+      <SpeedInsights />
     </>
   ),
 });
