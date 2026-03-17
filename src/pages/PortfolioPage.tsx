@@ -82,7 +82,7 @@ const projects: Project[] = [
     category: "Branding",
     badge: "Branding",
     badgeColor: "bg-[#DF9F57]",
-    desc: "Creative wall branding and large format print design.",
+    desc: "Custom wallpaper branding designed for a vibrant kids' room.",
   },
 ];
 

@@ -10,8 +10,6 @@ export default function Navbar() {
   const location = useRouterState({ select: (s) => s.location });
 
   const pathname = location.pathname.replace(/\/+$/g, "") || "/";
-  const isHome = pathname === "/";
-  const variant = isHome ? "transparent" : "light";
 
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 100);
@@ -19,11 +17,11 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (variant !== "transparent") return;
     const handleScroll = () => setScrolled(window.scrollY > 40);
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [variant]);
+  }, []);
 
   const scrollTo = (id: string) => {
     setMobileOpen(false);
@@ -37,17 +35,15 @@ export default function Navbar() {
     }
   };
 
-  const isTransparent = variant === "transparent";
+  const useLightHeader = scrolled;
 
-  const navBg = isTransparent
-    ? scrolled
-      ? "bg-[#005280]/90 backdrop-blur-md shadow-md"
-      : "bg-transparent"
+  const navBg = scrolled
+    ? "bg-white/95 backdrop-blur-md shadow-md border-b border-slate-200/80"
     : "bg-[#005280]/95 backdrop-blur-md shadow-sm";
 
-  const linkClass = isTransparent
-    ? "px-4 py-2 text-sm font-medium transition-colors rounded-lg text-white/70 hover:text-white hover:bg-white/5"
-    : "px-4 py-2 text-sm font-medium transition-colors rounded-lg text-white/80 hover:text-white hover:bg-white/10";
+  const linkClass = useLightHeader
+    ? "px-4 py-2 text-sm font-medium transition-colors rounded-lg text-[#094185]/80 hover:text-[#094185] hover:bg-slate-100"
+    : "px-4 py-2 text-sm font-medium transition-colors rounded-lg text-white/70 hover:text-white hover:bg-white/5";
 
   return (
     <nav
@@ -61,9 +57,9 @@ export default function Navbar() {
           <Link to="/" className="flex-shrink-0">
             <img
               src={
-                isTransparent
-                  ? "/assets/Aesthara white.png"
-                  : "/assets/Aesthara color.png"
+                useLightHeader
+                  ? "/assets/Aesthara color.png"
+                  : "/assets/Aesthara white.png"
               }
               alt="Aesthara"
               className="h-10 md:h-12 w-auto object-contain transition-all duration-300"
@@ -121,7 +117,7 @@ export default function Navbar() {
 
           <button
             type="button"
-            className={`md:hidden p-2 rounded-lg ${isTransparent ? "text-white" : "text-[#094185]"}`}
+            className={`md:hidden p-2 rounded-lg ${useLightHeader ? "text-[#094185]" : "text-white"}`}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -132,7 +128,7 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div
-          className="lg:hidden bg-[#005280]/95 border-t border-white/10 backdrop-blur-md"
+          className={`${useLightHeader ? "bg-white/95 border-slate-200/80" : "bg-[#005280]/95 border-white/10"} lg:hidden border-t backdrop-blur-md`}
         >
           <div className="px-4 py-4 flex flex-col gap-1">
             <Link
