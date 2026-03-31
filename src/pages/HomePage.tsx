@@ -733,14 +733,14 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             <StatCard
               icon={<FileText className="w-10 h-10" />}
-              value={2000}
+              value={2150}
               label="Slides Prepared"
               delay={0}
               triggered={statsTriggered}
             />
             <StatCard
               icon={<Presentation className="w-10 h-10" />}
-              value={105}
+              value={125}
               label="Presentations Designed"
               delay={100}
               triggered={statsTriggered}
